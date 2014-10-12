@@ -57,13 +57,16 @@ CscreenshotDlg::CscreenshotDlg(CWnd* pParent /*=NULL*/)
 void CscreenshotDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_EDIT1, m_edit_ctrl);
+	DDX_Control(pDX, IDC_EDIT2, m_edit_alt);
+	DDX_Control(pDX, IDC_EDIT3, m_edit_key);
 }
 
 BEGIN_MESSAGE_MAP(CscreenshotDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
-	ON_BN_CLICKED(IDC_BTN_SCREENSHOT, &CscreenshotDlg::OnBnClickedBtnScreenshot)
+	ON_BN_CLICKED(IDC_BTN_MODIFY, &CscreenshotDlg::OnBnClickedBtnModify)
 END_MESSAGE_MAP()
 
 
@@ -98,6 +101,14 @@ BOOL CscreenshotDlg::OnInitDialog()
 	SetIcon(m_hIcon, TRUE);			// 设置大图标
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
+	m_edit_ctrl.SetReadOnly();
+	m_edit_ctrl.SetWindowTextW(L"Ctrl");
+	m_edit_alt.SetReadOnly();
+	m_edit_alt.SetWindowTextW(L"Alt");
+
+	m_edit_key.SetWindowTextW(L"X");
+
+	dlg = new CScreenshotToolDlg;
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -152,17 +163,36 @@ HCURSOR CscreenshotDlg::OnQueryDragIcon()
 
 
 
-void CscreenshotDlg::OnBnClickedBtnScreenshot()
-{
-	dlg.DoModal();
-}
-
-
 
 BOOL CscreenshotDlg::PreTranslateMessage(MSG* pMsg)
 {
-	
+	switch(pMsg->message)
+	{
+		case WM_KEYDOWN:
+		{
+			Util::LOG(L"lParam=%c",pMsg->wParam);
+			CString key;
+			m_edit_key.GetWindowTextW(key);
+			if(key == pMsg->wParam )
+			{
+				if(dlg==NULL)
+				{
+					dlg = new CScreenshotToolDlg;
+				}
+				dlg->DoModal();
+				dlg=NULL;;
+				
+				return TRUE;
+			}
+		}
+		break;
+	}
 	if(pMsg->message==WM_KEYDOWN && pMsg->wParam==VK_ESCAPE) return TRUE; 
 
 return CDialog::PreTranslateMessage(pMsg);
+}
+
+void CscreenshotDlg::OnBnClickedBtnModify()
+{
+	// TODO: 在此添加控件通知处理程序代码
 }

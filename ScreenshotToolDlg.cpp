@@ -15,6 +15,7 @@ CScreenshotToolDlg::CScreenshotToolDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(CScreenshotToolDlg::IDD, pParent)
 {
 	Util::LOG(L"CScreenshotToolDlg");
+	isShown = FALSE;
 	//初始化像皮筋类,新增的resizeMiddle 类型
 	m_rectTracker.m_nStyle=CMyTracker::resizeMiddle|CMyTracker::solidLine;  
 	m_rectTracker.m_rect.SetRect(-1,-2,-3,-4);
@@ -72,9 +73,8 @@ BEGIN_MESSAGE_MAP(CScreenshotToolDlg, CDialogEx)
 	ON_WM_ERASEBKGND()
 	ON_WM_SETCURSOR()
 	ON_WM_RBUTTONUP()
-	ON_WM_CTLCOLOR()
-	ON_WM_KEYDOWN()
-	ON_WM_HOTKEY()
+	ON_WM_CTLCOLOR()		
+	ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
 
@@ -84,7 +84,7 @@ BOOL CScreenshotToolDlg::OnInitDialog()
 	Util::LOG(L"OnInitDialog");
 	CDialog::OnInitDialog();
 	//把对化框设置成全屏顶层窗口
-	SetWindowPos(&wndTopMost,0,0,m_xScreen/2,m_yScreen/2,SWP_SHOWWINDOW);    
+	SetWindowPos(&wndTopMost,0,0,m_xScreen,m_yScreen,SWP_SHOWWINDOW);    
 	//移动操作提示窗口
 	CRect rect;
 	//m_tipEdit.GetWindowRect(&rect);
@@ -101,7 +101,7 @@ BOOL CScreenshotToolDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 	
 	// TODO: Add extra initialization here
-	
+	isShown = TRUE;
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
 // If you add a minimize button to your dialog, you will need the code below
@@ -280,7 +280,7 @@ void CScreenshotToolDlg::OnLButtonDblClk(UINT nFlags, CPoint point)
         //保存位图到粘贴板中,bSave 为TRUE,
 		CopyScreenToBitmap(m_rectTracker.m_rect,TRUE);
 	  //  PostQuitMessage(0);
-		CDialog::OnCancel();
+		EndDialog(1);
 	}
 	CDialog::OnLButtonDblClk(nFlags, point);
 }
@@ -302,7 +302,8 @@ void CScreenshotToolDlg::OnRButtonUp(UINT nFlags, CPoint point)
 	else
 	{
 		 //关闭程序
-		 PostQuitMessage(0);
+		// PostQuitMessage(0);
+		CDialog::OnCancel();
 	}
 //****************************************************************************************
 	CDialog::OnRButtonUp(nFlags, point);
@@ -645,8 +646,10 @@ void CScreenshotToolDlg::ChangeRGB()
 	strOld=string;
 
 }
-void CScreenshotToolDlg::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+
+void CScreenshotToolDlg::OnDestroy()
 {
-		Util::LOG(L"OnKeyDown char=%d",nChar);
-		CDialog::OnKeyDown(nChar, nRepCnt,nFlags);
+	Util::LOG(L"ondestroy");
+	isShown = FALSE;
+	CDialog::OnDestroy();
 }

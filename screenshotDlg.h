@@ -3,6 +3,7 @@
 //
 
 #pragma once
+#include "afxwin.h"
 
 
 
@@ -31,7 +32,13 @@ protected:
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
 public:
-	afx_msg void OnBnClickedBtnScreenshot();
+	
 	BOOL PreTranslateMessage(MSG* pMsg);
-	CScreenshotToolDlg dlg;
+
+	afx_msg void OnBnClickedBtnModify();
+	CEdit m_edit_ctrl;
+	CEdit m_edit_alt;
+	CEdit m_edit_key;
+
+	CScreenshotToolDlg* dlg;
 };

@@ -108,9 +108,11 @@ BOOL CscreenshotApp::ProcessMessageFilter(int code, LPMSG lpMsg)
 				CRect rect(0,0,0,0);
 				CscreenshotDlg * pDlg=(CscreenshotDlg *)AfxGetMainWnd();
 				
-				rect=pDlg->dlg.m_rectTracker.m_rect;
+				if(pDlg->dlg==NULL) return TRUE;
 
-				if(pDlg->dlg.m_bFirstDraw)
+				rect=pDlg->dlg->m_rectTracker.m_rect;
+
+				if(pDlg->dlg->m_bFirstDraw)
 				{
 					
 					//如果Shift键按下则方向键调整大小
@@ -127,29 +129,29 @@ BOOL CscreenshotApp::ProcessMessageFilter(int code, LPMSG lpMsg)
 						//if(!isShifeDowm)
 							rect.top-=1;
 						rect.bottom-=1;
-						pDlg->dlg.m_rectTracker.m_rect=rect;
-						pDlg->dlg.PaintWindow();
+						pDlg->dlg->m_rectTracker.m_rect=rect;
+						pDlg->dlg->PaintWindow();
 						break;
 					case VK_DOWN:
 						//if(!isShifeDowm)
 							rect.top+=1;
 						rect.bottom+=1;
-						pDlg->dlg.m_rectTracker.m_rect=rect;
-						pDlg->dlg.PaintWindow();
+						pDlg->dlg->m_rectTracker.m_rect=rect;
+						pDlg->dlg->PaintWindow();
 						break;
 					case VK_LEFT:
 					//	if(!isShifeDowm)
 						rect.left-=1;
 						rect.right-=1;
-						pDlg->dlg.m_rectTracker.m_rect=rect;
-						pDlg->dlg.PaintWindow();
+						pDlg->dlg->m_rectTracker.m_rect=rect;
+						pDlg->dlg->PaintWindow();
 						break;
 					case VK_RIGHT:
 						//if(!isShifeDowm)
 							rect.left+=1;
 						rect.right+=1;
-						pDlg->dlg.m_rectTracker.m_rect=rect;
-						pDlg->dlg.PaintWindow();
+						pDlg->dlg->m_rectTracker.m_rect=rect;
+						pDlg->dlg->PaintWindow();
 						break;
 					}
 				}
