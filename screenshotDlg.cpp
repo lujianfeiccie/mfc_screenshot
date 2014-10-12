@@ -60,6 +60,10 @@ void CscreenshotDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT1, m_edit_ctrl);
 	DDX_Control(pDX, IDC_EDIT2, m_edit_alt);
 	DDX_Control(pDX, IDC_EDIT3, m_edit_key);
+	DDX_Control(pDX, IDC_CHECK_MAX_WIDTH, m_cbx_max_width);
+	DDX_Control(pDX, IDC_CHECK_MAX_HEIGHT, m_cbx_max_height);
+	DDX_Control(pDX, IDC_EDIT_MAX_WIDTH, m_edit_max_width);
+	DDX_Control(pDX, IDC_EDIT_MAX_HEIGHT, m_edit_max_height);
 }
 
 BEGIN_MESSAGE_MAP(CscreenshotDlg, CDialogEx)
@@ -67,6 +71,7 @@ BEGIN_MESSAGE_MAP(CscreenshotDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_BTN_MODIFY, &CscreenshotDlg::OnBnClickedBtnModify)
+	ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
 
@@ -106,7 +111,12 @@ BOOL CscreenshotDlg::OnInitDialog()
 	m_edit_alt.SetReadOnly();
 	m_edit_alt.SetWindowTextW(L"Alt");
 
-	m_edit_key.SetWindowTextW(L"X");
+	config = CModelConfigTool::Load();
+	m_edit_key.SetWindowTextW(config->m_edit_key);	
+	m_cbx_max_height.SetCheck(config->m_cbx_max_height);
+	m_cbx_max_width.SetCheck(config->m_cbx_max_width);
+	m_edit_max_height.SetWindowTextW(config->m_edit_max_height);
+	m_edit_max_width.SetWindowTextW(config->m_edit_max_width);
 
 	dlg = new CScreenshotToolDlg;
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
@@ -179,7 +189,28 @@ BOOL CscreenshotDlg::PreTranslateMessage(MSG* pMsg)
 				{
 					dlg = new CScreenshotToolDlg;
 				}
+				if(m_cbx_max_width.GetCheck())
+				{
+					CString max_width;
+					m_edit_max_width.GetWindowTextW(max_width);
+					dlg->m_max_width = _wtoi(max_width);
+				}
+				else
+				{
+					dlg->m_max_width = -1;
+				}
+				if(m_cbx_max_height.GetCheck())
+				{
+					CString max_height;
+					m_edit_max_height.GetWindowTextW(max_height);
+					dlg->m_max_height = _wtoi(max_height);
+				}
+				else
+				{
+					dlg->m_max_height = -1;
+				}
 				dlg->DoModal();
+				delete dlg;
 				dlg=NULL;;
 				
 				return TRUE;
@@ -195,4 +226,21 @@ return CDialog::PreTranslateMessage(pMsg);
 void CscreenshotDlg::OnBnClickedBtnModify()
 {
 	// TODO: 在此添加控件通知处理程序代码
+}
+void CscreenshotDlg::OnDestroy()
+{
+	config->m_cbx_max_height = m_cbx_max_height.GetCheck();
+	config->m_cbx_max_width = m_cbx_max_width.GetCheck();
+	m_edit_key.GetWindowTextW(config->m_edit_key);
+	m_edit_max_height.GetWindowTextW(config->m_edit_max_height);
+	m_edit_max_width.GetWindowTextW(config->m_edit_max_width);
+	CModelConfigTool::Save(config);
+	delete config;
+	config = NULL;
+	if(dlg!=NULL)
+	{
+		delete dlg;
+	}
+	dlg = NULL;
+	CDialog::OnDestroy();
 }

@@ -65,4 +65,7 @@ public:
 	
 	BOOL isShown;
 	afx_msg void OnDestroy();
+
+	int m_max_width;
+	int m_max_height;
 };

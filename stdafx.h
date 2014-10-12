@@ -58,3 +58,5 @@
 
 #include "Util.h"
 #include "ScreenshotToolDlg.h"
+#include "Config.h"
+#include "ModelConfigTool.h"

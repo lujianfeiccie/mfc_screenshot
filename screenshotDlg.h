@@ -41,4 +41,12 @@ public:
 	CEdit m_edit_key;
 
 	CScreenshotToolDlg* dlg;
+	CButton m_cbx_max_width;
+	CButton m_cbx_max_height;
+	CEdit m_edit_max_width;
+	CEdit m_edit_max_height;
+	CModelConfig *config;
+	afx_msg void OnDestroy();
+
+
 };

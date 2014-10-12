@@ -107,6 +107,9 @@
     <None Include="res\size4_r.cur" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Config.h" />
+    <ClInclude Include="ModelConfig.h" />
+    <ClInclude Include="ModelConfigTool.h" />
     <ClInclude Include="MyEdit.h" />
     <ClInclude Include="MyTracker.h" />
     <ClInclude Include="Resource.h" />
@@ -118,6 +121,9 @@
     <ClInclude Include="Util.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Config.cpp" />
+    <ClCompile Include="ModelConfig.cpp" />
+    <ClCompile Include="ModelConfigTool.cpp" />
     <ClCompile Include="MyEdit.cpp" />
     <ClCompile Include="MyTracker.cpp" />
     <ClCompile Include="screenshot.cpp" />

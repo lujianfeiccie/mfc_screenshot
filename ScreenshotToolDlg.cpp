@@ -48,6 +48,9 @@ CScreenshotToolDlg::CScreenshotToolDlg(CWnd* pParent /*=NULL*/)
 	//}}AFX_DATA_INIT
 	// Note that LoadIcon does not require a subsequent DestroyIcon in Win32
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+
+	m_max_width = -1;
+	m_max_height = -1;
 }
 
 CScreenshotToolDlg::~CScreenshotToolDlg()
@@ -84,7 +87,7 @@ BOOL CScreenshotToolDlg::OnInitDialog()
 	Util::LOG(L"OnInitDialog");
 	CDialog::OnInitDialog();
 	//把对化框设置成全屏顶层窗口
-	SetWindowPos(&wndTopMost,0,0,m_xScreen,m_yScreen,SWP_SHOWWINDOW);    
+	SetWindowPos(&wndTopMost,0,0,m_xScreen/2,m_yScreen/2,SWP_SHOWWINDOW);    
 	//移动操作提示窗口
 	CRect rect;
 	//m_tipEdit.GetWindowRect(&rect);
@@ -186,20 +189,51 @@ void CScreenshotToolDlg::OnCancel()
 
 void CScreenshotToolDlg::OnMouseMove(UINT nFlags, CPoint point) 
 {
-	Util::LOG(L"OnMouseMove (%ld,%ld)",point.x,point.y);
+	//Util::LOG(L"OnMouseMove (%ld,%ld) %d",point.x,point.y,m_bDraw);
 	// TODO: Add your message handler code here and/or call default
 //**************************************************************************************
 	   if(m_bDraw)
 	   {
-			//动态调整矩形大小,并刷新画出
-		    m_rectTracker.m_rect.SetRect(m_startPt.x+4,m_startPt.y+4,point.x,point.y);
-			PaintWindow();
+			 
+			if(m_max_width>0 && abs(point.x-m_startPt.x) <= m_max_width)
+			{
+				Util::LOG(L"m_max_width>0 && abs(point.x-m_startPt.x) <= m_max_width");
+				m_rectTracker.m_rect.SetRect(m_startPt.x+4,m_startPt.y+4,point.x,point.y);
+				PaintWindow();
+			}
+		    if(m_max_height>0 && abs(point.y-m_startPt.y) <= m_max_height)
+			{
+				Util::LOG(L"m_max_height>0 && abs(point.y-m_startPt.y) <= m_max_height");
+				m_rectTracker.m_rect.SetRect(m_startPt.x+4,m_startPt.y+4,point.x,point.y);
+				PaintWindow();
+			}
+			if(m_max_width ==-1 && m_max_height ==-1)
+			{
+				Util::LOG(L"m_max_width ==-1 && m_max_height ==-1");
+				m_rectTracker.m_rect.SetRect(m_startPt.x+4,m_startPt.y+4,point.x,point.y);
+				PaintWindow();
+			}
 	   }
 	   
 	   //弥补调整大小和位置时,接收不到MouseMove消息
 	   CRect rect;
+	   int width = (m_rectTracker.m_rect.right - m_rectTracker.m_rect.left);
+	   int height = (m_rectTracker.m_rect.bottom - m_rectTracker.m_rect.top);
+	   Util::LOG(L"(%d,%d) width=%d height=%d",m_rectTracker.m_rect.left,m_rectTracker.m_rect.top,width,height);
+	   if(m_max_width>0 && width >= m_max_width)
+       {
+			Util::LOG(L"m_max_width>0 && abs(point.x-m_startPt.x) <= m_max_width");
+			m_rectTracker.m_rect.SetRect(m_rectTracker.m_rect.left,m_rectTracker.m_rect.top,
+				m_rectTracker.m_rect.left+m_max_width,m_rectTracker.m_rect.bottom);		
+	   }
+	   if(m_max_height>0 && height >= m_max_height)
+       {
+			Util::LOG(L"m_max_width>0 && abs(point.x-m_startPt.x) <= m_max_width");
+			m_rectTracker.m_rect.SetRect(m_rectTracker.m_rect.left,m_rectTracker.m_rect.top,
+				m_rectTracker.m_rect.right,m_rectTracker.m_rect.top+m_max_height);		
+	   }
 //	   m_tipEdit.GetWindowRect(&rect);
-	   if(rect.PtInRect(point));
+	//   if(rect.PtInRect(point));
 	//   m_tipEdit.SendMessage(WM_MOUSEMOVE);
        
 	   ChangeRGB();
@@ -572,7 +606,7 @@ void CScreenshotToolDlg::DrawMessage(CRect &inRect,CDC * pDC)
 	pDC->DrawText(string,outRect,DT_CENTER);
 
 	outRect.SetRect(rect.left,rect.top+charHeight*3,rect.left+lineLength,charHeight+rect.top+charHeight*3);
-	string.Format(L"(%d,%d)",inRect.Width(),inRect.Height());
+	string.Format(L"(%d,%d)",inRect.Width()-8,inRect.Height()-8);
     pDC->DrawText(string,outRect,DT_CENTER);
 
 	outRect.SetRect(rect.left,rect.top+charHeight*4,rect.left+lineLength,charHeight+rect.top+charHeight*4);
