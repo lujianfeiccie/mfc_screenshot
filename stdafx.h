@@ -56,3 +56,5 @@
 #endif
 
 
+#include "Util.h"
+#include "ScreenshotToolDlg.h"

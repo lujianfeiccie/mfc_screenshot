@@ -18,8 +18,9 @@
 class CscreenshotApp : public CWinApp
 {
 public:
+	HWND m_hwndDlg;
 	CscreenshotApp();
-
+	virtual BOOL ProcessMessageFilter(int code,LPMSG lpMsg);
 // ÖØÐ´
 public:
 	virtual BOOL InitInstance();

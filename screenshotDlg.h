@@ -5,6 +5,7 @@
 #pragma once
 
 
+
 // CscreenshotDlg ¶Ô»°¿ò
 class CscreenshotDlg : public CDialogEx
 {
@@ -31,7 +32,5 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnBnClickedBtnScreenshot();
-	void WriteBmpToFile(HBITMAP hBitmap);
-	void CopyBmpToClipBoard(HBITMAP hBitmap);
-	CString m_str_save_path;
+	BOOL PreTranslateMessage(MSG* pMsg);
 };

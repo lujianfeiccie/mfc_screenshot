@@ -5,12 +5,12 @@
 #include "stdafx.h"
 #include "screenshot.h"
 #include "screenshotDlg.h"
-
+#include "ScreenshotToolDlg.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
 
-
+#define SHIFTED 0x8000 
 // CscreenshotApp
 
 BEGIN_MESSAGE_MAP(CscreenshotApp, CWinApp)
@@ -66,7 +66,7 @@ BOOL CscreenshotApp::InitInstance()
 	// TODO: 应适当修改该字符串，
 	// 例如修改为公司或组织名
 	SetRegistryKey(_T("应用程序向导生成的本地应用程序"));
-
+	
 	CscreenshotDlg dlg;
 	m_pMainWnd = &dlg;
 	INT_PTR nResponse = dlg.DoModal();
@@ -92,3 +92,69 @@ BOOL CscreenshotApp::InitInstance()
 	return FALSE;
 }
 
+
+BOOL CscreenshotApp::ProcessMessageFilter(int code, LPMSG lpMsg) 
+{
+	// TODO: Add your specialized code here and/or call the base class
+	if(m_hwndDlg!=NULL)
+	{   //判断消息，如果消息是从对话框发出的或者其子控件发出的，就进行处理
+		if((lpMsg->hwnd==m_hwndDlg) || ::IsChild(m_hwndDlg,lpMsg->hwnd))
+		{
+			//如果消息是WM_KEYDOWN
+			//用方向键调整位置
+			if(lpMsg->message==WM_KEYDOWN)
+			{
+				CRect rect(0,0,0,0);
+				CScreenshotToolDlg * pDlg=(CScreenshotToolDlg *)AfxGetMainWnd();
+				
+				rect=pDlg->m_rectTracker.m_rect;
+
+				if(pDlg->m_bFirstDraw)
+				{
+					
+					//如果Shift键按下则方向键调整大小
+					BOOL isShifeDowm=FALSE;
+					int nVirtKey;
+					nVirtKey = GetKeyState(VK_SHIFT); 
+					if (nVirtKey & SHIFTED) 
+						isShifeDowm=TRUE;
+
+					switch(lpMsg->wParam)
+					{
+					case VK_UP:
+						//如果按下Shift,则只调整一边
+						if(!isShifeDowm)
+							rect.top-=1;
+						rect.bottom-=1;
+						pDlg->m_rectTracker.m_rect=rect;
+						pDlg->PaintWindow();
+						break;
+					case VK_DOWN:
+						if(!isShifeDowm)
+							rect.top+=1;
+						rect.bottom+=1;
+						pDlg->m_rectTracker.m_rect=rect;
+						pDlg->PaintWindow();
+						break;
+					case VK_LEFT:
+						if(!isShifeDowm)
+							rect.left-=1;
+						rect.right-=1;
+						pDlg->m_rectTracker.m_rect=rect;
+						pDlg->PaintWindow();
+						break;
+					case VK_RIGHT:
+						if(!isShifeDowm)
+							rect.left+=1;
+						rect.right+=1;
+						pDlg->m_rectTracker.m_rect=rect;
+						pDlg->PaintWindow();
+						break;
+					}
+				}
+			}
+			
+		}
+	} 
+	return CWinApp::ProcessMessageFilter(code, lpMsg);
+}

@@ -22,6 +22,30 @@
     <None Include="res\screenshot.ico">
       <Filter>资源文件</Filter>
     </None>
+    <None Include="res\back.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\bitmap2.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\arrow_m.cur">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\move_r.cur">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\size1_r.cur">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\size2_r.cur">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\size3_r.cur">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\size4_r.cur">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="screenshot.h">
@@ -39,6 +63,18 @@
     <ClInclude Include="Resource.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Util.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ScreenshotToolDlg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MyTracker.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MyEdit.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="screenshot.cpp">
@@ -48,6 +84,18 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Util.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ScreenshotToolDlg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MyTracker.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MyEdit.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
