@@ -27,6 +27,7 @@ public:
 	afx_msg BOOL OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message);
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
 	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
+	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 // 对话框数据
 	enum { IDD = IDD_SCREENSHOTTOOLDLG };
 
@@ -61,4 +62,5 @@ public:
 	void DrawMessage(CRect &inRect,CDC * pDC);       //显示截取矩形信息
 	void PaintWindow();               //重画窗口
 	void ChangeRGB();
+	void OnHotHey(UINT nHotKeyId, UINT nKey1, UINT nKey2);
 };

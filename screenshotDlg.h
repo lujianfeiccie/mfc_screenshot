@@ -33,4 +33,5 @@ protected:
 public:
 	afx_msg void OnBnClickedBtnScreenshot();
 	BOOL PreTranslateMessage(MSG* pMsg);
+	CScreenshotToolDlg dlg;
 };

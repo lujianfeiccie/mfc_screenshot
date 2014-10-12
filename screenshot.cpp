@@ -22,6 +22,7 @@ END_MESSAGE_MAP()
 
 CscreenshotApp::CscreenshotApp()
 {
+	m_hwndDlg = NULL;
 	// 支持重新启动管理器
 	m_dwRestartManagerSupportFlags = AFX_RESTART_MANAGER_SUPPORT_RESTART;
 
@@ -105,11 +106,11 @@ BOOL CscreenshotApp::ProcessMessageFilter(int code, LPMSG lpMsg)
 			if(lpMsg->message==WM_KEYDOWN)
 			{
 				CRect rect(0,0,0,0);
-				CScreenshotToolDlg * pDlg=(CScreenshotToolDlg *)AfxGetMainWnd();
+				CscreenshotDlg * pDlg=(CscreenshotDlg *)AfxGetMainWnd();
 				
-				rect=pDlg->m_rectTracker.m_rect;
+				rect=pDlg->dlg.m_rectTracker.m_rect;
 
-				if(pDlg->m_bFirstDraw)
+				if(pDlg->dlg.m_bFirstDraw)
 				{
 					
 					//如果Shift键按下则方向键调整大小
@@ -123,32 +124,32 @@ BOOL CscreenshotApp::ProcessMessageFilter(int code, LPMSG lpMsg)
 					{
 					case VK_UP:
 						//如果按下Shift,则只调整一边
-						if(!isShifeDowm)
+						//if(!isShifeDowm)
 							rect.top-=1;
 						rect.bottom-=1;
-						pDlg->m_rectTracker.m_rect=rect;
-						pDlg->PaintWindow();
+						pDlg->dlg.m_rectTracker.m_rect=rect;
+						pDlg->dlg.PaintWindow();
 						break;
 					case VK_DOWN:
-						if(!isShifeDowm)
+						//if(!isShifeDowm)
 							rect.top+=1;
 						rect.bottom+=1;
-						pDlg->m_rectTracker.m_rect=rect;
-						pDlg->PaintWindow();
+						pDlg->dlg.m_rectTracker.m_rect=rect;
+						pDlg->dlg.PaintWindow();
 						break;
 					case VK_LEFT:
-						if(!isShifeDowm)
-							rect.left-=1;
+					//	if(!isShifeDowm)
+						rect.left-=1;
 						rect.right-=1;
-						pDlg->m_rectTracker.m_rect=rect;
-						pDlg->PaintWindow();
+						pDlg->dlg.m_rectTracker.m_rect=rect;
+						pDlg->dlg.PaintWindow();
 						break;
 					case VK_RIGHT:
-						if(!isShifeDowm)
+						//if(!isShifeDowm)
 							rect.left+=1;
 						rect.right+=1;
-						pDlg->m_rectTracker.m_rect=rect;
-						pDlg->PaintWindow();
+						pDlg->dlg.m_rectTracker.m_rect=rect;
+						pDlg->dlg.PaintWindow();
 						break;
 					}
 				}

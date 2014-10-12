@@ -154,8 +154,6 @@ HCURSOR CscreenshotDlg::OnQueryDragIcon()
 
 void CscreenshotDlg::OnBnClickedBtnScreenshot()
 {
-
-	CScreenshotToolDlg dlg;
 	dlg.DoModal();
 }
 

@@ -14,6 +14,7 @@ IMPLEMENT_DYNAMIC(CScreenshotToolDlg, CDialogEx)
 CScreenshotToolDlg::CScreenshotToolDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(CScreenshotToolDlg::IDD, pParent)
 {
+	Util::LOG(L"CScreenshotToolDlg");
 	//初始化像皮筋类,新增的resizeMiddle 类型
 	m_rectTracker.m_nStyle=CMyTracker::resizeMiddle|CMyTracker::solidLine;  
 	m_rectTracker.m_rect.SetRect(-1,-2,-3,-4);
@@ -50,12 +51,14 @@ CScreenshotToolDlg::CScreenshotToolDlg(CWnd* pParent /*=NULL*/)
 
 CScreenshotToolDlg::~CScreenshotToolDlg()
 {
+	Util::LOG(L"~CScreenshotToolDlg");
 }
 
 void CScreenshotToolDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	//DDX_Control(pDX, IDC_EDIT1, m_tipEdit);
+	
 }
 
 
@@ -70,15 +73,18 @@ BEGIN_MESSAGE_MAP(CScreenshotToolDlg, CDialogEx)
 	ON_WM_SETCURSOR()
 	ON_WM_RBUTTONUP()
 	ON_WM_CTLCOLOR()
+	ON_WM_KEYDOWN()
+	ON_WM_HOTKEY()
 END_MESSAGE_MAP()
 
 
 // CScreenshotToolDlg 消息处理程序
 BOOL CScreenshotToolDlg::OnInitDialog()
 {
+	Util::LOG(L"OnInitDialog");
 	CDialog::OnInitDialog();
 	//把对化框设置成全屏顶层窗口
-	SetWindowPos(&wndTopMost,0,0,m_xScreen,m_yScreen,SWP_SHOWWINDOW);    
+	SetWindowPos(&wndTopMost,0,0,m_xScreen/2,m_yScreen/2,SWP_SHOWWINDOW);    
 	//移动操作提示窗口
 	CRect rect;
 	//m_tipEdit.GetWindowRect(&rect);
@@ -104,6 +110,7 @@ BOOL CScreenshotToolDlg::OnInitDialog()
 
 void CScreenshotToolDlg::OnPaint() 
 {
+	Util::LOG(L"OnPaint");
 	if (IsIconic())
 	{
 		CPaintDC dc(this); // device context for painting
@@ -140,6 +147,7 @@ void CScreenshotToolDlg::OnPaint()
 		{
 			m_rectTracker.Draw(&dc);
 		}
+		
 		CDialog::OnPaint();
 	}
 }
@@ -178,6 +186,7 @@ void CScreenshotToolDlg::OnCancel()
 
 void CScreenshotToolDlg::OnMouseMove(UINT nFlags, CPoint point) 
 {
+	Util::LOG(L"OnMouseMove (%ld,%ld)",point.x,point.y);
 	// TODO: Add your message handler code here and/or call default
 //**************************************************************************************
 	   if(m_bDraw)
@@ -200,6 +209,7 @@ void CScreenshotToolDlg::OnMouseMove(UINT nFlags, CPoint point)
 
 void CScreenshotToolDlg::OnLButtonDown(UINT nFlags, CPoint point) 
 {
+	Util::LOG(L"OnLButtonDown (%ld,%ld)",point.x,point.y);
 	// TODO: Add your message handler code here and/or call default
 //*****************************************************************************************
 	int nHitTest;
@@ -245,6 +255,7 @@ void CScreenshotToolDlg::OnLButtonDown(UINT nFlags, CPoint point)
 
 void CScreenshotToolDlg::OnLButtonUp(UINT nFlags, CPoint point) 
 {
+	Util::LOG(L"OnLButtonUp (%ld,%ld)",point.x,point.y);
 	// TODO: Add your message handler code here and/or call default
 //****************************************************************************************
     
@@ -254,11 +265,12 @@ void CScreenshotToolDlg::OnLButtonUp(UINT nFlags, CPoint point)
 
 	PaintWindow();
 //****************************************************************************************
-	CDialog::OnLButtonUp(nFlags, point);
+	CDialog::OnLButtonUp(nFlags, point);	
 }
 
 void CScreenshotToolDlg::OnLButtonDblClk(UINT nFlags, CPoint point) 
 {
+	Util::LOG(L"OnLButtonDblClk (%ld,%ld)",point.x,point.y);
 	// TODO: Add your message handler code here and/or call default
 	int nHitTest;
 	nHitTest=m_rectTracker.HitTest(point);
@@ -275,6 +287,7 @@ void CScreenshotToolDlg::OnLButtonDblClk(UINT nFlags, CPoint point)
 
 void CScreenshotToolDlg::OnRButtonUp(UINT nFlags, CPoint point) 
 {
+	Util::LOG(L"OnRButtonUp (%ld,%ld)",point.x,point.y);
 	// TODO: Add your message handler code here and/or call default
 	//****************************************************************************************
 	if(m_bFirstDraw)
@@ -577,21 +590,24 @@ void CScreenshotToolDlg::DrawMessage(CRect &inRect,CDC * pDC)
 //重画窗口
 void CScreenshotToolDlg::PaintWindow()
 {
+	Util::LOG(L"PaintWindow");
 	//获取当全屏对话框窗口大小
 	CRect rect1;
 	GetWindowRect(rect1);
 
 	//获取编辑框窗口大小
-	CRect rect2;
+	//CRect rect2;
 
-	CRgn rgn1,rgn2;
-	rgn1.CreateRectRgnIndirect(rect1);
-	rgn2.CreateRectRgnIndirect(rect2);
+//	CRgn rgn1,rgn2;
+//	rgn1.CreateRectRgnIndirect(rect1);
+	//rgn2.CreateRectRgnIndirect(rect2);
 
 	//获取更新区域,就是除了编辑框窗口不更新
-	m_rgn.CombineRgn(&rgn1,&rgn2,RGN_DIFF);
+	//m_rgn.CombineRgn(&rgn1,&rgn2,RGN_DIFF);
 	
-	InvalidateRgn(&m_rgn);
+	InvalidateRect(rect1);
+	//InvalidateRgn(&m_rgn);
+	//Invalidate();
 }
 //改变操作提示窗口当RGB值
 void CScreenshotToolDlg::ChangeRGB()
@@ -628,4 +644,9 @@ void CScreenshotToolDlg::ChangeRGB()
 	
 	strOld=string;
 
+}
+void CScreenshotToolDlg::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+		Util::LOG(L"OnKeyDown char=%d",nChar);
+		CDialog::OnKeyDown(nChar, nRepCnt,nFlags);
 }
