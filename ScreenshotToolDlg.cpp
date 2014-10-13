@@ -87,7 +87,7 @@ BOOL CScreenshotToolDlg::OnInitDialog()
 	Util::LOG(L"OnInitDialog");
 	CDialog::OnInitDialog();
 	//把对化框设置成全屏顶层窗口
-	SetWindowPos(&wndTopMost,0,0,m_xScreen/2,m_yScreen/2,SWP_SHOWWINDOW);    
+	SetWindowPos(&wndTopMost,0,0,m_xScreen,m_yScreen,SWP_SHOWWINDOW);    
 	//移动操作提示窗口
 	CRect rect;
 	//m_tipEdit.GetWindowRect(&rect);
@@ -351,10 +351,10 @@ HBRUSH CScreenshotToolDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 	// TODO: Return a different brush if the default is not desired
 //***********************************************************
 	//设置操作提示窗口文本颜色
-	if(pWnd->GetDlgCtrlID()==IDC_EDIT1)
+/*	if(pWnd->GetDlgCtrlID()==IDC_EDIT1)
 	{
 		pDC->SetTextColor(RGB(255,255,255));
-	}
+	}*/
 //***************************************************************
 	// TODO: Return a different brush if the default is not desired
 	return hbr;
@@ -365,8 +365,8 @@ BOOL CScreenshotToolDlg::OnEraseBkgnd(CDC* pDC)
 	// TODO: Add your message handler code here and/or call default
 //**************************************************************************************
 	//用整个桌面填充全屏对话框背景
-	BITMAP bmp;
-	m_pBitmap->GetBitmap(&bmp);
+	//BITMAP bmp;
+	//m_pBitmap->GetBitmap(&bmp);
 
 	CDC dcCompatible;
 	dcCompatible.CreateCompatibleDC(pDC);
@@ -376,7 +376,7 @@ BOOL CScreenshotToolDlg::OnEraseBkgnd(CDC* pDC)
 	CRect rect;
 	GetClientRect(&rect);
 	pDC->BitBlt(0,0,rect.Width(),rect.Height(),&dcCompatible,0,0,SRCCOPY);
-
+	
 	return TRUE;
 //**************************************************************************************
 	//return CDialog::OnEraseBkgnd(pDC);

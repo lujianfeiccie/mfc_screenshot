@@ -72,6 +72,8 @@ BEGIN_MESSAGE_MAP(CscreenshotDlg, CDialogEx)
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_BTN_MODIFY, &CscreenshotDlg::OnBnClickedBtnModify)
 	ON_WM_DESTROY()
+	ON_BN_CLICKED(IDC_CHECK_MAX_WIDTH, &CscreenshotDlg::OnBnClickedCheckMaxWidth)
+	ON_BN_CLICKED(IDC_CHECK_MAX_HEIGHT, &CscreenshotDlg::OnBnClickedCheckMaxHeight)
 END_MESSAGE_MAP()
 
 
@@ -113,8 +115,13 @@ BOOL CscreenshotDlg::OnInitDialog()
 
 	config = CModelConfigTool::Load();
 	m_edit_key.SetWindowTextW(config->m_edit_key);	
+
 	m_cbx_max_height.SetCheck(config->m_cbx_max_height);
 	m_cbx_max_width.SetCheck(config->m_cbx_max_width);
+
+	OnBnClickedCheckMaxWidth();
+	OnBnClickedCheckMaxHeight();
+
 	m_edit_max_height.SetWindowTextW(config->m_edit_max_height);
 	m_edit_max_width.SetWindowTextW(config->m_edit_max_width);
 
@@ -243,4 +250,31 @@ void CscreenshotDlg::OnDestroy()
 	}
 	dlg = NULL;
 	CDialog::OnDestroy();
+}
+
+void CscreenshotDlg::OnBnClickedCheckMaxWidth()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	if(m_cbx_max_width.GetCheck())
+	{
+		m_edit_max_width.EnableWindow();
+	}
+	else
+	{
+		m_edit_max_width.EnableWindow(FALSE);
+	}
+}
+
+
+void CscreenshotDlg::OnBnClickedCheckMaxHeight()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	if(m_cbx_max_height.GetCheck())
+	{
+		m_edit_max_height.EnableWindow();
+	}
+	else
+	{
+		m_edit_max_height.EnableWindow(FALSE);
+	}
 }
